@@ -22,67 +22,123 @@ namespace FormsCSharpe
         }
     }
      public class Formulario : Form{
-         Label label1;
-        Label label2;
+         Label labelLogin;
+         Label labelSenha;
+         Label labelSelect;
+         Label labelRadioSim;
+         Label labelRadioNao;
+         Label labelCheck;
          Button buttonLimpar;
          Button buttonConfirmar;
-
          TextBox textBoxLogin;
          TextBox textBoxSenha;
+         ComboBox comboOpcao;
+         GroupBox groupRadios;
+         RadioButton radioSim;
+         RadioButton radioNao;
+         CheckBox checkLi;
+
+
+
+
+
          public Formulario(){
             this.Text = "Login Sistema";
             this.BackColor = Color.FromArgb(200,200,200);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Height = 200;
+            this.Height = 300;
 
-            label1 = new Label();
-            label2 = new Label();
+            labelLogin = new Label();
+            labelSenha = new Label();
+            labelSelect = new Label();
+            labelRadioNao = new Label();
+            labelRadioSim = new Label();
+            labelCheck = new Label();
             textBoxLogin = new TextBox();
             textBoxSenha = new TextBox();
             buttonLimpar = new Button ();
             buttonConfirmar = new Button ();
+            comboOpcao = new ComboBox();
+            radioSim = new RadioButton();
+            radioNao = new RadioButton();
+            groupRadios = new GroupBox();
+            checkLi = new CheckBox();
 
-            // Define a localização da label
-            label1.Location = new Point (this.Width/3, 5);
-            label2.Location = new Point (label1.Left, label1.Height + textBoxLogin.Height + label1.Top + 10);
-            // Define o texto que será mostrado
-            label1.Text = "Login";
-            label2.Text = "Senha";
-            label1.ForeColor = Color.FromArgb(50,50,200);
-            label2.ForeColor = Color.FromArgb(50,50,200);
-            // Adiciona a label no form
-
-            // permite que ele tenha retorno de informação
-            textBoxLogin.AcceptsReturn = true;
-            textBoxSenha.AcceptsReturn = true;
-            // nao permite a utilização de tab
-            textBoxLogin.AcceptsTab = false;
-            textBoxSenha.AcceptsTab = false;
-            // da a posição para o textbox
-            textBoxLogin.Location = new Point (this.Width/3, label1.Height+ 10);
-            textBoxSenha.Location = new Point (textBoxLogin.Left, textBoxLogin.Height + label1.Height + label2.Height + label1.Top + 10);
-
+            labelLogin.Text = "Login";
+            labelLogin.Width = 50;
+            labelSenha.Text = "Senha";
+            labelSenha.Width = 50;
+            labelSelect.Text = "Nivel";
+            labelSelect.Width = 50;
+            groupRadios.Width = 135;
+            groupRadios.Height = 35;
+            labelRadioNao.Text = "Não";
+            labelRadioNao.Width = 30;
+            labelRadioSim.Text = "Sim";
+            labelRadioSim.Width = 30;
+            radioNao.Width = 20;
+            radioSim.Width = 20;
+            checkLi.Width = 20;
+            labelCheck.Text = "Li e Aceito";
+            labelCheck.Width = 70;
             buttonLimpar.Text = "Limpar";
-            // Define a localização em tela com coordenadas X e Y do botão
-            buttonLimpar.Location = new Point (this.Width/5,  label1.Height + textBoxLogin.Height +  label2.Height + textBoxLogin.Height + label1.Top + 20);
-
             buttonConfirmar.Text = "Enviar";
-            // Define a localização botão 2 baseado no botão 1
-            buttonConfirmar.Location = new Point(buttonLimpar.Left + buttonLimpar.Width + 20, buttonLimpar.Top);
 
+            String[] niveis = {"Selecione", "Inicio", "Meio", "Fim"};
+            foreach(String nivel in niveis){
+                comboOpcao.SelectedItem = "Selecione";
+                comboOpcao.Items.Add(nivel);
+            }
+            groupRadios.Controls.Add(labelRadioNao);
+            groupRadios.Controls.Add(radioNao);
+            groupRadios.Controls.Add(labelRadioSim);
+            groupRadios.Controls.Add(radioSim);
+
+            labelLogin.ForeColor = Color.FromArgb(50,50,200);
+            labelSenha.ForeColor = Color.FromArgb(50,50,200);
+            labelSelect.ForeColor = Color.FromArgb(50,50,200);
             buttonLimpar.BackColor = Color.FromArgb(200,50,50);
             buttonConfirmar.BackColor = Color.FromArgb(50,200,50);
 
             buttonConfirmar.Click += new System.EventHandler(this.btnConfirmarClick);
 
+            labelLogin.Location = new Point (10, 30);
+            textBoxLogin.Location = new Point (60, 30);
+
+            labelSenha.Location = new Point (10, 70);
+            textBoxSenha.Location = new Point (60, 70);
+
+            labelSelect.Location = new Point (10, 110);
+            comboOpcao.Location = new Point (60, 110);
+            
+            groupRadios.Location = new Point (10,150);
+
+            labelRadioNao.Location = new Point (1, 12);
+            radioNao.Location = new Point (labelRadioNao.Width+1, 8);
+
+            labelRadioSim.Location = new Point (radioNao.Width+labelRadioSim.Width+10, 12);
+            radioSim.Location = new Point (radioNao.Width+labelRadioSim.Width+ labelRadioSim.Width+10, 8);
+
+
+            checkLi.Location = new Point (labelCheck.Width, 200);
+            labelCheck.Location = new Point (1, 204);
+
+            buttonConfirmar.Location = new Point(10, 220);
+            buttonLimpar.Location = new Point (100, 220);
+
             // adiciona-se ele no form
-            this.Controls.Add(label1);
-            this.Controls.Add(label2);
+            this.Controls.Add(labelLogin);
+            this.Controls.Add(labelSenha);
             this.Controls.Add(textBoxLogin);
             this.Controls.Add(textBoxSenha);
             this.Controls.Add(buttonConfirmar);
             this.Controls.Add(buttonLimpar);
+            this.Controls.Add(labelSelect);
+            this.Controls.Add(comboOpcao);
+            this.Controls.Add(groupRadios);
+            this.Controls.Add(checkLi);
+            this.Controls.Add(labelCheck);
          }
         private void btnConfirmarClick(object sender, EventArgs args){
             MessageBox.Show(
