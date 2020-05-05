@@ -25,8 +25,6 @@ namespace FormsCSharpe
          Label labelLogin;
          Label labelSenha;
          Label labelSelect;
-         Label labelRadioSim;
-         Label labelRadioNao;
          Label labelCheck;
          Button buttonLimpar;
          Button buttonConfirmar;
@@ -38,22 +36,16 @@ namespace FormsCSharpe
          RadioButton radioNao;
          CheckBox checkLi;
 
-
-
-
-
          public Formulario(){
             this.Text = "Login Sistema";
             this.BackColor = Color.FromArgb(200,200,200);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Height = 300;
+            this.Size = new Size(200, 300);
 
             labelLogin = new Label();
             labelSenha = new Label();
             labelSelect = new Label();
-            labelRadioNao = new Label();
-            labelRadioSim = new Label();
             labelCheck = new Label();
             textBoxLogin = new TextBox();
             textBoxSenha = new TextBox();
@@ -71,14 +63,11 @@ namespace FormsCSharpe
             labelSenha.Width = 50;
             labelSelect.Text = "Nivel";
             labelSelect.Width = 50;
-            groupRadios.Width = 135;
-            groupRadios.Height = 35;
-            labelRadioNao.Text = "Não";
-            labelRadioNao.Width = 30;
-            labelRadioSim.Text = "Sim";
-            labelRadioSim.Width = 30;
-            radioNao.Width = 20;
-            radioSim.Width = 20;
+            groupRadios.Size = new Size(135, 35);
+            radioNao.Text = "Não";
+            radioSim.Text = "Sim";
+            radioNao.Width = 50;
+            radioSim.Width = 50;
             checkLi.Width = 20;
             labelCheck.Text = "Li e Aceito";
             labelCheck.Width = 70;
@@ -90,9 +79,7 @@ namespace FormsCSharpe
                 comboOpcao.SelectedItem = "Selecione";
                 comboOpcao.Items.Add(nivel);
             }
-            groupRadios.Controls.Add(labelRadioNao);
             groupRadios.Controls.Add(radioNao);
-            groupRadios.Controls.Add(labelRadioSim);
             groupRadios.Controls.Add(radioSim);
 
             labelLogin.ForeColor = Color.FromArgb(50,50,200);
@@ -114,11 +101,9 @@ namespace FormsCSharpe
             
             groupRadios.Location = new Point (10,150);
 
-            labelRadioNao.Location = new Point (1, 12);
-            radioNao.Location = new Point (labelRadioNao.Width+1, 8);
+            radioNao.Location = new Point (1, 8);
 
-            labelRadioSim.Location = new Point (radioNao.Width+labelRadioSim.Width+10, 12);
-            radioSim.Location = new Point (radioNao.Width+labelRadioSim.Width+ labelRadioSim.Width+10, 8);
+            radioSim.Location = new Point (radioNao.Width+10, 8);
 
 
             checkLi.Location = new Point (labelCheck.Width, 200);
@@ -141,9 +126,18 @@ namespace FormsCSharpe
             this.Controls.Add(labelCheck);
          }
         private void btnConfirmarClick(object sender, EventArgs args){
+
+            List<RadioButton> radios = this.groupRadios.Controls.OfType<RadioButton>().ToList();
+            RadioButton radio3 = radios.FirstOrDefault(radio3=> radio3.Checked);
+
+
             MessageBox.Show(
                 $"Login: {this.textBoxLogin.Text} \n"+
-                $"Senha: {this.textBoxLogin.Text} \n",
+                $"Senha: {this.textBoxLogin.Text} \n\n"+
+                $"Selecionado: {this.comboOpcao.SelectedItem } \n\n"+
+                $"Marcado: {(this.radioSim.Checked ? "Sim" : this.radioNao.Checked ? "Não" : "Não Selecionado" )} \n\n"+
+                $"CheckBox: {(this.checkLi.Checked ? "Marcado" : "Desmarcado")}\n\n"/*+
+                $"CheckBox: {(radio3.Text)}"*/,
                 "Titulo",
                 MessageBoxButtons.OK
             );
