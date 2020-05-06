@@ -4,17 +4,21 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace FormsCSharpe
 {
+    
     static class Program
     {
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
+        
         static void Main()
         {
+            
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -22,33 +26,45 @@ namespace FormsCSharpe
         }
     }
      public class Formulario : Form{
-         Label labelLogin;
-         Label labelSenha;
-         Label labelSelect;
-         Label labelCheck;
-         Button buttonLimpar;
-         Button buttonConfirmar;
-         TextBox textBoxLogin;
-         TextBox textBoxSenha;
-         ComboBox comboOpcao;
-         GroupBox groupRadios;
-         RadioButton radioSim;
-         RadioButton radioNao;
-         CheckBox checkLi;
 
-         public Formulario(){
+        Label labelLogin;
+        Label labelSenha;
+        Label labelSelect;
+        Label labelCheck;
+        Label labelNumeros;
+        Label labelMascarado;
+        Label labelTextArea;
+        TextBox textBoxLogin;
+        TextBox textBoxSenha;
+        MaskedTextBox textBoxMascarado;
+        Button buttonLimpar;
+        Button buttonConfirmar;
+        ComboBox comboOpcao;
+        RadioButton radioSim;
+        RadioButton radioNao;
+        GroupBox groupRadios;
+        CheckBox checkLi;
+        NumericUpDown numeros;
+        PictureBox imagem;
+        RichTextBox textArea;
+        LinkLabel linkLabel;
+
+        public Formulario(){
             this.Text = "Login Sistema";
             this.BackColor = Color.FromArgb(200,200,200);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Size = new Size(200, 300);
+            this.Size = new Size(200, 500);
 
             labelLogin = new Label();
             labelSenha = new Label();
             labelSelect = new Label();
             labelCheck = new Label();
+            labelNumeros = new Label();
+            labelMascarado = new Label();
             textBoxLogin = new TextBox();
             textBoxSenha = new TextBox();
+            textBoxMascarado = new MaskedTextBox();
             buttonLimpar = new Button ();
             buttonConfirmar = new Button ();
             comboOpcao = new ComboBox();
@@ -56,6 +72,28 @@ namespace FormsCSharpe
             radioNao = new RadioButton();
             groupRadios = new GroupBox();
             checkLi = new CheckBox();
+            numeros = new NumericUpDown();
+
+            imagem = new PictureBox();
+            imagem.BackColor = Color.Red;
+            imagem.Location = new Point (0, 300);
+            imagem.ClientSize = new Size(10,10);
+            imagem.Text = "aqui";
+            imagem.Load("./image.png");
+
+            textArea = new RichTextBox();
+            labelTextArea = new Label();
+            labelTextArea.Width = 60;
+            labelTextArea.Text = "TextArea";
+            textArea.Size = new Size(100,40);
+            labelTextArea.Location = new Point (0, 310);
+            textArea.Location = new Point (60, 310);
+
+            linkLabel = new LinkLabel();
+            linkLabel.Location = new Point(0,360);
+            linkLabel.Size = new Size(100, 30);
+            linkLabel.Text="Linke Aqui";
+            linkLabel.LinkClicked += new LinkLabelLinkClickedEventHandler(helpLink);
 
             labelLogin.Text = "Login";
             labelLogin.Width = 50;
@@ -63,6 +101,10 @@ namespace FormsCSharpe
             labelSenha.Width = 50;
             labelSelect.Text = "Nivel";
             labelSelect.Width = 50;
+            labelMascarado.Text = "Mascarado";
+            labelMascarado.Width = 50;
+            labelNumeros.Text = "Números";
+            labelNumeros.Width = 60;
             groupRadios.Size = new Size(135, 35);
             radioNao.Text = "Não";
             radioSim.Text = "Sim";
@@ -73,6 +115,10 @@ namespace FormsCSharpe
             labelCheck.Width = 70;
             buttonLimpar.Text = "Limpar";
             buttonConfirmar.Text = "Enviar";
+            textBoxMascarado.Mask = "999.999.999-99";
+            numeros.Minimum = 1;
+            numeros.Maximum = 10;
+            numeros.Increment = 2;
 
             String[] niveis = {"Selecione", "Inicio", "Meio", "Fim"};
             foreach(String nivel in niveis){
@@ -81,12 +127,6 @@ namespace FormsCSharpe
             }
             groupRadios.Controls.Add(radioNao);
             groupRadios.Controls.Add(radioSim);
-
-            labelLogin.ForeColor = Color.FromArgb(50,50,200);
-            labelSenha.ForeColor = Color.FromArgb(50,50,200);
-            labelSelect.ForeColor = Color.FromArgb(50,50,200);
-            buttonLimpar.BackColor = Color.FromArgb(200,50,50);
-            buttonConfirmar.BackColor = Color.FromArgb(50,200,50);
 
             buttonConfirmar.Click += new System.EventHandler(this.btnConfirmarClick);
 
@@ -108,9 +148,15 @@ namespace FormsCSharpe
 
             checkLi.Location = new Point (labelCheck.Width, 200);
             labelCheck.Location = new Point (1, 204);
+            
+            labelMascarado.Location  = new Point (0, 230);
+            textBoxMascarado.Location = new Point(60 ,230);
 
-            buttonConfirmar.Location = new Point(10, 220);
-            buttonLimpar.Location = new Point (100, 220);
+            labelNumeros.Location = new Point (0, 260);
+            numeros.Location =  new Point (60, 260);
+
+            buttonConfirmar.Location = new Point(10, 400);
+            buttonLimpar.Location = new Point (100, 400);
 
             // adiciona-se ele no form
             this.Controls.Add(labelLogin);
@@ -124,7 +170,21 @@ namespace FormsCSharpe
             this.Controls.Add(groupRadios);
             this.Controls.Add(checkLi);
             this.Controls.Add(labelCheck);
+            this.Controls.Add(labelMascarado);
+            this.Controls.Add(textBoxMascarado);
+            this.Controls.Add(labelNumeros);  
+            this.Controls.Add(numeros);
+            this.Controls.Add(imagem);   
+            this.Controls.Add(labelTextArea);
+            this.Controls.Add(textArea);
+            this.Controls.Add(linkLabel);               
          }
+
+        private void helpLink(object sender, LinkLabelLinkClickedEventArgs e){
+            this.linkLabel.LinkVisited = true;
+
+            System.Diagnostics.Process.Start("C:/Program Files(x86)/Google/Chrome/Application/chrome.exe");
+        }
         private void btnConfirmarClick(object sender, EventArgs args){
 
             List<RadioButton> radios = this.groupRadios.Controls.OfType<RadioButton>().ToList();
@@ -136,7 +196,8 @@ namespace FormsCSharpe
                 $"Senha: {this.textBoxLogin.Text} \n\n"+
                 $"Selecionado: {this.comboOpcao.SelectedItem } \n\n"+
                 $"Marcado: {(this.radioSim.Checked ? "Sim" : this.radioNao.Checked ? "Não" : "Não Selecionado" )} \n\n"+
-                $"CheckBox: {(this.checkLi.Checked ? "Marcado" : "Desmarcado")}\n\n"/*+
+                $"CheckBox: {(this.checkLi.Checked ? "Marcado" : "Desmarcado")}\n\n"+
+                $"CheckBox: {this.textBoxMascarado.Text}\n\n"/*+
                 $"CheckBox: {(radio3.Text)}"*/,
                 "Titulo",
                 MessageBoxButtons.OK
