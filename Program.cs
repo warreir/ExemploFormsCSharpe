@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.ComponentModel;
 
 namespace FormsCSharpe
 {
@@ -48,13 +46,18 @@ namespace FormsCSharpe
         PictureBox imagem;
         RichTextBox textArea;
         LinkLabel linkLabel;
+        ListBox listBox;
+        String nomeAdd;
+        ListView listView;
+
+        CheckedListBox listChecked;
 
         public Formulario(){
             this.Text = "Login Sistema";
             this.BackColor = Color.FromArgb(200,200,200);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Size = new Size(200, 500);
+            this.Size = new Size(200, 700);
 
             labelLogin = new Label();
             labelSenha = new Label();
@@ -73,6 +76,7 @@ namespace FormsCSharpe
             groupRadios = new GroupBox();
             checkLi = new CheckBox();
             numeros = new NumericUpDown();
+
 
             imagem = new PictureBox();
             imagem.BackColor = Color.Red;
@@ -94,6 +98,45 @@ namespace FormsCSharpe
             linkLabel.Size = new Size(100, 30);
             linkLabel.Text="Linke Aqui";
             linkLabel.LinkClicked += new LinkLabelLinkClickedEventHandler(helpLink);
+            
+            listBox = new ListBox();
+            listBox.Items.Add("teste");
+            listBox.Items.Add("teste");
+            listBox.Items.Add("teste");
+            listBox.Location = new Point(0,390);
+            listBox.Size = new Size(100,40);
+            //listBox.SelectionMode = SelectionMode.MultiExtended;
+            //listBox.Multicolumn = true;
+            //listBox.endUpdate();
+            foreach (var item in listBox.SelectedItems)
+            {
+                nomeAdd += item;
+            }
+
+            listView = new ListView();
+            listView.Location = new Point(0,450);
+            listView.Size = new Size(200,50);
+            listView.View = View.Details;
+            ListViewItem exemplo1 =  new ListViewItem("Exemplo 1");
+            exemplo1.SubItems.Add("2");
+            ListViewItem exemplo2 =  new ListViewItem("Exemplo 2");
+            exemplo2.SubItems.Add("1");
+            listView.Items.AddRange(new ListViewItem[]{exemplo1, exemplo2});
+            listView.Columns.Add("Ex", -2, HorizontalAlignment.Left);
+            listView.Columns.Add("Num", -2, HorizontalAlignment.Left);
+            listView.FullRowSelect = true;
+            listView.GridLines = true;
+            listView.AllowColumnReorder = true;
+            listView.Sorting = SortOrder.Ascending;
+
+            listChecked = new CheckedListBox();
+            listChecked.Location = new Point(0,500);
+            listChecked.Size = new Size(200,50);
+            string[] lista = {"exemplo1", "exemplo2"};
+            listChecked.Items.AddRange(lista);
+            listChecked.SelectionMode = SelectionMode.One;
+            listChecked.CheckOnClick = true;
+            //listCheked.ChekedItems;
 
             labelLogin.Text = "Login";
             labelLogin.Width = 50;
@@ -155,8 +198,8 @@ namespace FormsCSharpe
             labelNumeros.Location = new Point (0, 260);
             numeros.Location =  new Point (60, 260);
 
-            buttonConfirmar.Location = new Point(10, 400);
-            buttonLimpar.Location = new Point (100, 400);
+            buttonConfirmar.Location = new Point(10, 550);
+            buttonLimpar.Location = new Point (100, 550);
 
             // adiciona-se ele no form
             this.Controls.Add(labelLogin);
@@ -177,7 +220,10 @@ namespace FormsCSharpe
             this.Controls.Add(imagem);   
             this.Controls.Add(labelTextArea);
             this.Controls.Add(textArea);
-            this.Controls.Add(linkLabel);               
+            this.Controls.Add(linkLabel);
+            this.Controls.Add(listBox);
+            this.Controls.Add(listView);
+            this.Controls.Add(listChecked);            
          }
 
         private void helpLink(object sender, LinkLabelLinkClickedEventArgs e){
