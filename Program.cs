@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -20,6 +21,7 @@ namespace FormsCSharpe
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Application.EnableVisualStyles();
             Application.Run(new Formulario());
         }
     }
@@ -49,15 +51,24 @@ namespace FormsCSharpe
         ListBox listBox;
         String nomeAdd;
         ListView listView;
-
         CheckedListBox listChecked;
+        MonthCalendar calendario;
+        DateTimePicker dtPicker;
+        ProgressBar barraLoading;
+        TabControl tabContral;
+        TabPage tabPagePrincipal;
+        TabPage tabPageSecundario;
+        ToolTip toolTipNome = new ToolTip();
+        TrackBar trackBar;
+        Button openFile;
+        MenuStrip menu;
 
         public Formulario(){
             this.Text = "Login Sistema";
             this.BackColor = Color.FromArgb(200,200,200);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Size = new Size(200, 700);
+            this.Size = new Size(600, 650);
 
             labelLogin = new Label();
             labelSenha = new Label();
@@ -76,7 +87,8 @@ namespace FormsCSharpe
             groupRadios = new GroupBox();
             checkLi = new CheckBox();
             numeros = new NumericUpDown();
-
+            groupRadios.Controls.Add(radioNao);
+            groupRadios.Controls.Add(radioSim);
 
             imagem = new PictureBox();
             imagem.BackColor = Color.Red;
@@ -168,16 +180,77 @@ namespace FormsCSharpe
                 comboOpcao.SelectedItem = "Selecione";
                 comboOpcao.Items.Add(nivel);
             }
-            groupRadios.Controls.Add(radioNao);
-            groupRadios.Controls.Add(radioSim);
+
+            calendario = new MonthCalendar();
+            calendario.Location = new Point(300, 0);
+            //calendario.MaxSelectionCount = 10;
+            //calendario.MinDate = new DateTime(2020,05,10);
+            //calendario.MaxDate = new DateTime(2020,05,20);
+            calendario.SelectionRange = new SelectionRange(new DateTime(2020,05,10), new DateTime(2020,05,20));
+
+            dtPicker = new DateTimePicker();
+            dtPicker.Location= new Point(300,200);
+            //dtPicker.Format = DateTimePickerFormat.Long;
+            dtPicker.Format = DateTimePickerFormat.Short;
+            //dtPicker.CustomFormat = "dd/MM/yyyy HH:mm";
+            //dtPicker.ShowUpDown = true;
+            //dtPicker.ShowCheckBox = true;
+
+            barraLoading = new ProgressBar();
+            barraLoading.Value = 50;
+            barraLoading.Maximum = 100;
+            barraLoading.Size = new Size(200,30);
+            barraLoading.Location = new Point(300, 250);
+            barraLoading.Style = ProgressBarStyle.Blocks;
+
+    // ------------------ Tab control -------------------- //
+            tabPagePrincipal = new TabPage();
+            tabPagePrincipal.Text = "Principal";
+            tabPagePrincipal.Size = new Size(200,100);
+            tabPagePrincipal.Controls.Add(labelLogin);
+            tabPagePrincipal.Controls.Add(textBoxLogin);
+
+            tabPageSecundario = new TabPage();
+            tabPageSecundario.Text = "Secundario";
+            tabPageSecundario.Size = new Size(200,100);
+            tabPageSecundario.Controls.Add(labelSenha);
+            tabPageSecundario.Controls.Add(textBoxSenha);
+            
+            tabContral = new TabControl();
+            tabContral.Size =new Size(200,100);
+            tabContral.Controls.Add(tabPagePrincipal);
+            tabContral.Controls.Add(tabPageSecundario);
+    // ------------------ fim  Tab control -------------------- //
+
+            toolTipNome.AutoPopDelay = 5000;
+            toolTipNome.InitialDelay  =1000;
+            toolTipNome.ReshowDelay = 500;
+            toolTipNome.ShowAlways = true;
+            toolTipNome.SetToolTip(labelLogin, "Login - preencha com alguma coisa");
+
+            trackBar = new TrackBar();
+            trackBar.Location = new Point (300,300);
+            trackBar.Size = new Size(100,100);
+            trackBar.Maximum = 30;
+            trackBar.TickFrequency = 5;
+            trackBar.LargeChange = 5;
+            trackBar.SmallChange = 5;
+
+            openFile = new Button();
+            openFile.Location = new Point(300,350);
+            openFile.Text = "Abrir Arquivo";
+            openFile.Click += new System.EventHandler(this.openFileFunc);
+
+            //menu = new MenuStrip();
+            //ToolStripMenuItem windowMenu = new ToolStripMenuItem("window", null, new EventHandler());
 
             buttonConfirmar.Click += new System.EventHandler(this.btnConfirmarClick);
 
             labelLogin.Location = new Point (10, 30);
             textBoxLogin.Location = new Point (60, 30);
 
-            labelSenha.Location = new Point (10, 70);
-            textBoxSenha.Location = new Point (60, 70);
+            labelSenha.Location = new Point (10, 30);
+            textBoxSenha.Location = new Point (60, 30);
 
             labelSelect.Location = new Point (10, 110);
             comboOpcao.Location = new Point (60, 110);
@@ -202,10 +275,10 @@ namespace FormsCSharpe
             buttonLimpar.Location = new Point (100, 550);
 
             // adiciona-se ele no form
-            this.Controls.Add(labelLogin);
-            this.Controls.Add(labelSenha);
-            this.Controls.Add(textBoxLogin);
-            this.Controls.Add(textBoxSenha);
+            //this.Controls.Add(labelLogin);
+            //this.Controls.Add(labelSenha);
+            ///this.Controls.Add(textBoxLogin);
+            ///this.Controls.Add(textBoxSenha);
             this.Controls.Add(buttonConfirmar);
             this.Controls.Add(buttonLimpar);
             this.Controls.Add(labelSelect);
@@ -223,7 +296,13 @@ namespace FormsCSharpe
             this.Controls.Add(linkLabel);
             this.Controls.Add(listBox);
             this.Controls.Add(listView);
-            this.Controls.Add(listChecked);            
+            this.Controls.Add(listChecked);
+            this.Controls.Add(calendario);
+            this.Controls.Add(dtPicker);  
+            this.Controls.Add(barraLoading); 
+            this.Controls.Add(tabContral);
+            this.Controls.Add(trackBar);
+            this.Controls.Add(openFile);
          }
 
         private void helpLink(object sender, LinkLabelLinkClickedEventArgs e){
@@ -231,20 +310,40 @@ namespace FormsCSharpe
 
             System.Diagnostics.Process.Start("C:/Program Files(x86)/Google/Chrome/Application/chrome.exe");
         }
+
+        public void openFileFunc(object sender, EventArgs args){
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "Arquivo de Texto (*.TXT)| *.txt";
+            if(dialog.ShowDialog( )!= DialogResult.Cancel){
+                StreamReader arquivo = new StreamReader(dialog.FileName);
+                String conteudo = arquivo.ReadLine();
+                arquivo.Dispose();
+
+                MessageBox.Show(conteudo);
+                this.textBoxLogin.Text = conteudo;
+
+            }
+        }
+
         private void btnConfirmarClick(object sender, EventArgs args){
 
             List<RadioButton> radios = this.groupRadios.Controls.OfType<RadioButton>().ToList();
             RadioButton radio3 = radios.FirstOrDefault(radio3=> radio3.Checked);
 
+            for(int i=0; i<=50; i++){
+                barraLoading.PerformStep();
+            }
 
             MessageBox.Show(
                 $"Login: {this.textBoxLogin.Text} \n"+
-                $"Senha: {this.textBoxLogin.Text} \n\n"+
+                $"Senha: {this.textBoxSenha.Text} \n\n"+
                 $"Selecionado: {this.comboOpcao.SelectedItem } \n\n"+
                 $"Marcado: {(this.radioSim.Checked ? "Sim" : this.radioNao.Checked ? "Não" : "Não Selecionado" )} \n\n"+
                 $"CheckBox: {(this.checkLi.Checked ? "Marcado" : "Desmarcado")}\n\n"+
-                $"CheckBox: {this.textBoxMascarado.Text}\n\n"/*+
-                $"CheckBox: {(radio3.Text)}"*/,
+                $"CheckBox: {this.textBoxMascarado.Text}\n\n"+
+                $"Calendario: {(this.calendario.SelectionRange.Start)}\n\n"+
+                $"Calendario: {(this.calendario.SelectionRange.End)}\n\n"+
+                $"Date Piker: {(this.dtPicker.Value)}",
                 "Titulo",
                 MessageBoxButtons.OK
             );
